@@ -29,7 +29,7 @@ class Matcher:
     def print_matches(self, threshold, score):
         matches = self.find_matches(threshold, score)
         for match in matches:
-            print match[0].attr.id + ", " match[1].attr.id
+            print match[0].attr.id + ", " + match[1].attr.id
 
 class Score:
     # weighted_distances is a hash. Key is the distance class and
