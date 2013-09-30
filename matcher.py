@@ -2,6 +2,7 @@ import Business
 import sys
 import json
 import distances
+import csv
 
 class Matcher:
     def __init__(self, filename1, filename2):
@@ -55,10 +56,11 @@ def basic_weighted_distances():
             distances.Website : 0.33
             }
 
-def print_matches(matches):
-    print 'locu_id,foursquare_id'
-    for k in matches.keys():
-        print str(k) + ',' + str(matches[k])
+def print_matches_csv(header, matches, filename):
+    with open(filename, 'wb') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        writer.writerows(matches)
 
 if __name__ == '__main__':
     filename1 = sys.args[1]
@@ -67,5 +69,7 @@ if __name__ == '__main__':
 
     score = Score(basic_weighted_distances())
     threshold = 0.75
-    matcher.print_matches(threshold, score)
+    matches = matcher.find_matches(threshold, score)
+
+    print_matches_csv('locu_id,foursquare_id', matches, 'matches_test.csv')
 
