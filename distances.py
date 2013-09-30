@@ -42,6 +42,12 @@ class Distance():
         # 0->1, m->0
         return 1 - (current[n] / m)
 
+    @staticmethod
+    def is_exact_match(a,b):
+        if a.attr['name']==b.attr['name'] || a.attr['phone']==b.attr['phone']:
+            return True
+        return False
+
 class Levenshtein(Distance):
     @staticmethod
     def distance(a,b,attr):
