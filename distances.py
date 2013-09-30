@@ -40,7 +40,7 @@ class Distance():
                     change = change + 1
                 current[j] = min(add, delete, change) 
         # 0->1, m->0
-        return 1 - (current[n] / m)
+        return 1 - (current[n] / float(m))
 
     @staticmethod
     def is_exact_match(a,b):
@@ -80,7 +80,7 @@ class LatLng(Distance):
             dist += (lng_a-lng_b)**2
         if dist > lat_lng_threshold:
             return 0
-        return 1 - (dist / lat_lng_threshold)
+        return 1 - (dist / float(lat_lng_threshold))
 
 class Name(Levenshtein):
     @staticmethod
