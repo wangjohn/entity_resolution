@@ -51,18 +51,16 @@ class Score:
             return 1.0
         if distances.Distance.is_exact_not_match(datum1, datum2):
             return 0.0
-        score = 0.0
-        total_weight = 0.0
-        distances_used = 0
+
+        results = []
         for distance, weight in self.weighted_distances.iteritems():
             dist = distance.distance(datum1, datum2)
             if dist:
-                total_weight += weight
-                score += weight*(dist)
-                distances_used += 1
+                results.append([weight, dist, distance])
 
-        if total_weight > 0 and distances_used >= 2:
-            return float(score) / total_weight
+        if len(results) >= 2:
+            r = sum([result[0]*result[1] for result in results])  / (sum([result[0] for result in results]))
+            return r**(1.0/len(results))
         else:
             return 0
 
@@ -87,7 +85,7 @@ if __name__ == '__main__':
     matcher = Matcher(filename1, filename2)
 
     score = Score(basic_weighted_distances())
-    threshold = 0.8
+    threshold = 0.75
 
     matches = matcher.find_matches(threshold, score, 'matches_test.csv')
 
