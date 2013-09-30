@@ -25,18 +25,19 @@ class Matcher:
         f.close()
         return biz_col
 
-    def find_matches(self, threshold, score):
+    def find_matches(self, threshold, score, filename, header = ['locu_id', 'foursquare_id']):
         matches = []
-        for datum1 in self.data1:
-            for datum2 in self.data2:
-                if score.similarity(datum1, datum2) > threshold:
-                    matches.append((datum1, datum2))
+        with open(filename, 'wb') as f:
+            writer = csv.writer(f)
+            writer.writerow(header)
+            for datum1 in self.data1:
+                for datum2 in self.data2:
+                    similarity = score.similarity(datum1, datum2)
+                    if similarity > threshold:
+                        print similarity, datum1.attr['name'], ",", datum2.attr['name']
+                        matches.append((datum1, datum2))
+                        writer.writerow([datum1.attr['id'], datum2.attr['id']])
         return matches
-
-    def print_matches(self, threshold, score):
-        matches = self.find_matches(threshold, score)
-        for match in matches:
-            print match[0].attr.id + ", " + match[1].attr.id
 
 class Score:
     # weighted_distances is a hash. Key is the distance class and
@@ -45,28 +46,37 @@ class Score:
         self.weighted_distances = weighted_distances
 
     def similarity(self, datum1, datum2):
-        score = 0
-        total_weight = 0
+        if distances.Distance.is_exact_match(datum1, datum2):
+            return 1.0
+        score = 0.0
+        total_weight = 0.0
+        distances_used = 0
         for distance, weight in self.weighted_distances.iteritems():
             dist = distance.distance(datum1, datum2)
             if dist:
                 total_weight += weight
-                score += weight*(1 - distance.distance(datum1, datum2))
+                score += weight*(dist)
+                distances_used += 1
 
-        return float(score) / total_weight
+        if total_weight > 0 and distances_used >= 2:
+            return float(score) / total_weight
+        else:
+            return 0
 
 def basic_weighted_distances():
     return {
-            distances.Name : 0.33,
-            distances.Address : 0.33,
-            distances.Website : 0.33
+            distances.Name : 5,
+            distances.Address : 5,
+            distances.Website : 1,
+            distances.Phone : 10
             }
 
 def print_matches_csv(header, matches, filename):
     with open(filename, 'wb') as f:
         writer = csv.writer(f)
         writer.writerow(header)
-        writer.writerows(matches)
+        for datum1, datum2 in matches:
+            writer.writerows([datum1.attr['id'], datum2.attr['id']])
 
 if __name__ == '__main__':
     filename1 = sys.argv[1]
@@ -74,8 +84,7 @@ if __name__ == '__main__':
     matcher = Matcher(filename1, filename2)
 
     score = Score(basic_weighted_distances())
-    threshold = 0.75
-    matches = matcher.find_matches(threshold, score)
+    threshold = 0.85
 
-    print_matches_csv('locu_id,foursquare_id', matches, 'matches_test.csv')
+    matches = matcher.find_matches(threshold, score, 'matches_test.csv')
 
