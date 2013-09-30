@@ -17,6 +17,8 @@ Defines a distance metric for every field in the dataset.
 
 '''
 
+import re
+
 lat_lng_threshold = .0001
 
 class Distance():
@@ -60,8 +62,8 @@ class Distance():
                 for num2 in re.finditer('(\d+)', b.attr['street_address']):
                     if num1 == num2:
                         any_match = True
-            if !any_match:
-                return True
+            if not any_match:
+                return True 
         return False
 
 class Levenshtein(Distance):
