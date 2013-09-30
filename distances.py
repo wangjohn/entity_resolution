@@ -50,12 +50,14 @@ class Levenshtein(Distance):
         return Distance.levenshtein(a.attr[attr], b.attr[attr])
 
 class ExactMatch(Distance):
+    @staticmethod
     def distance(a,b,attr):
         if (a.attr[attr] == "" or b.attr[attr] == ""):
             return None
         return 1 if a.attr[attr] == b.attr[attr] else 0
 
 class LatLng(Distance):
+    @staticmethod
     def distance(a,b):
         lat_a = float(a.attr['lattitude'])
         lat_b = float(b.attr['lattitude'])
@@ -78,35 +80,22 @@ class Name(Levenshtein):
         return Levenshtein.distance(a,b,"name")
 
 class Address(Levenshtein):
+    @staticmethod
     def distance(a,b):
-        return distance(a,b,"street_address")
+        return Levenshtein.distance(a,b,"street_address")
 
 class Website(Levenshtein):
+    @staticmethod
     def distance(a,b):
-        return distance(a,b,"website")
+        return Levenshtein.distance(a,b,"website")
 
 class PostalCode(ExactMatch):
+    @staticmethod
     def distance(a,b):
-        return distance(a,b,"postal_code")
+        return ExactMatch.distance(a,b,"postal_code")
 
 class Phone(ExactMatch):
+    @staticmethod
     def distance(a,b):
-        return distance(a,b,"phone")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return ExactMatch.distance(a,b,"phone")
 
