@@ -17,7 +17,7 @@ Defines a distance metric for every field in the dataset.
 
 '''
 
-lat_lng_threshold = .5
+lat_lng_threshold = .0001
 
 class Distance():
     @staticmethod
