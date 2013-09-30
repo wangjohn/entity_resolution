@@ -2,7 +2,21 @@ import json, sys, io, string
 
 class Business:
     def __init__(self, dic):
+        FIELDS = ['country', 
+                  'id', 
+                  'latitude', 
+                  'longitude', 
+                  'locality', 
+                  'name',
+                  'phone',
+                  'postal_code',
+                  'region',
+                  'street_address',
+                  'website']
         self.attr = dic
+        for field in FIELDS:
+            if field not in self.attr:
+                self.attr[field] = ''
 
     def matches(self, other):
         # TODO
