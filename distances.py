@@ -19,7 +19,7 @@ Defines a distance metric for every field in the dataset.
 
 import re
 
-lat_lng_threshold = .0001
+lat_lng_threshold = .25
 
 class Distance():
     @staticmethod

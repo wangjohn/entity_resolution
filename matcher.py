@@ -72,10 +72,10 @@ class Score:
 def basic_weighted_distances():
     return {
             distances.Name : 1,
-            distances.Address : 1,
-            distances.Website : 1,
-            distances.PostalCode: 1,
-            distances.Phone : 1
+            distances.Address : 1.5,
+            distances.Website : 2,
+            distances.PostalCode: 2,
+            distances.Phone : 5
             }
 
 def print_matches_csv(header, matches, filename):
