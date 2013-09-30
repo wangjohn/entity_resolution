@@ -1,7 +1,7 @@
 import Business
 import sys
 import json
-import distances
+import distances, cleaners
 import csv
 
 class Matcher:
@@ -15,6 +15,8 @@ class Matcher:
         biz_col = []
         for d in data:
             biz = Business.Business(d)
+            biz.attr["phone"] = cleaners.clean_phone(biz.attr["phone"])
+            biz.attr["street_address"] = cleaners.clean_address(biz.attr["street_address"])
             biz_col.append(biz)
         f.close()
         return biz_col
@@ -63,8 +65,6 @@ def print_matches_csv(header, matches, filename):
         writer.writerows(matches)
 
 if __name__ == '__main__':
-    print distances.Name.distance(None, None)
-
     filename1 = sys.argv[1]
     filename2 = sys.argv[2]
     matcher = Matcher(filename1, filename2)

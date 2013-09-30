@@ -9,8 +9,6 @@ class Business:
         # return value 0-1
         return 1
 
-
-
 THRESH = 0.8
 def match(locu, fs):
     locu_col = create_biz_col(locu)
