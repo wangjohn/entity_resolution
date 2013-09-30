@@ -50,6 +50,12 @@ class Distance():
             return True
         return False
 
+    @staticmethod
+    def is_exact_not_match(a,b):
+        if a.attr['name']!="" and a.attr['street_address']!="" and a.attr['name']==b.attr['name'] and Address.distance(a,b) < .9:
+            return True
+        return False
+
 class Levenshtein(Distance):
     @staticmethod
     def distance(a,b,attr):

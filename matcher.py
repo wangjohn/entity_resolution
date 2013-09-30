@@ -20,6 +20,7 @@ class Matcher:
                     biz.attr[key] = ""
             biz.attr["phone"] = cleaners.clean_phone(biz.attr["phone"])
             biz.attr["street_address"] = cleaners.clean_address(biz.attr["street_address"])
+            biz.attr["website"] = cleaners.clean_website(biz.attr["website"])
             biz_col.append(biz)
         f.close()
         return biz_col
