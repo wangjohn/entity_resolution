@@ -4,10 +4,10 @@ address_mappings = {
     " street": " st",
     " avenue": " ave",
     " road": " rd",
-    " east ": " e. ",
-    " west ": " w. ",
-    " north ": " n. ",
-    " south ": " s. ",
+    " east ": " e ",
+    " west ": " w ",
+    " north ": " n ",
+    " south ": " s ",
 }
 
 def clean_phone(phone_number):
