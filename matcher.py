@@ -9,7 +9,7 @@ class Matcher:
         self.data1 = self.create_collection(filename1)
         self.data2 = self.create_collection(filename2)
 
-    def create_collection(file_name):
+    def create_collection(self, file_name):
         f = open(file_name)
         data = json.load(f)
         biz_col = []
@@ -36,7 +36,7 @@ class Score:
     # weighted_distances is a hash. Key is the distance class and
     # value is the weight.
     def __init__(self, weighted_distances):
-        self.weighted_distances
+        self.weighted_distances = weighted_distances
 
     def similarity(self, datum1, datum2):
         score = 0
@@ -63,8 +63,10 @@ def print_matches_csv(header, matches, filename):
         writer.writerows(matches)
 
 if __name__ == '__main__':
-    filename1 = sys.args[1]
-    filename2 = sys.args[2]
+    print distances.Name.distance(None, None)
+
+    filename1 = sys.argv[1]
+    filename2 = sys.argv[2]
     matcher = Matcher(filename1, filename2)
 
     score = Score(basic_weighted_distances())

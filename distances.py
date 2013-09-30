@@ -20,9 +20,11 @@ Defines a distance metric for every field in the dataset.
 lat_lng_threshold = .5
 
 class Distance():
+    @staticmethod
     def distance(a,b):
         pass
 
+    @staticmethod
     def levenshtein(a,b):
         n, m = len(a), len(b)
         if n > m:
@@ -40,17 +42,18 @@ class Distance():
         # 0->1, m->0
         return 1 - (current[n] / m)
 
-class Levenshtein(Distance)
+class Levenshtein(Distance):
+    @staticmethod
     def distance(a,b,attr):
         if (a.attr[attr] == "" or b.attr[attr] == ""):
             return None
-        return levenshtein(a.attr[attr]), b.attr[attr]))
+        return Distance.levenshtein(a.attr[attr], b.attr[attr])
 
 class ExactMatch(Distance):
     def distance(a,b,attr):
         if (a.attr[attr] == "" or b.attr[attr] == ""):
             return None
-        return 1 if a.attr[attr] == b.attr[attr] else return 0
+        return 1 if a.attr[attr] == b.attr[attr] else 0
 
 class LatLng(Distance):
     def distance(a,b):
@@ -58,7 +61,7 @@ class LatLng(Distance):
         lat_b = float(b.attr['lattitude'])
         lng_a = float(a.attr['longitude'])
         lng_b = float(b.attr['longitude'])
-        if ((lat_a == "" or lat_b == "") and (lng_a == "" or lng_b == ""):
+        if ((lat_a == "" or lat_b == "") and (lng_a == "" or lng_b == "")):
             return None
         dist = 0 
         if (lat_a != "" and lat_b != ""):
@@ -70,8 +73,9 @@ class LatLng(Distance):
         return 1 - (dist / lat_lng_threshold)
 
 class Name(Levenshtein):
+    @staticmethod
     def distance(a,b):
-        return distance(a,b,"name")
+        return Levenshtein.distance(a,b,"name")
 
 class Address(Levenshtein):
     def distance(a,b):
@@ -81,11 +85,11 @@ class Website(Levenshtein):
     def distance(a,b):
         return distance(a,b,"website")
 
-class PostalCode(ExactMatch)
+class PostalCode(ExactMatch):
     def distance(a,b):
         return distance(a,b,"postal_code")
 
-class Phone(ExactMatch)
+class Phone(ExactMatch):
     def distance(a,b):
         return distance(a,b,"phone")
 
