@@ -49,8 +49,8 @@ class Score:
     def similarity(self, datum1, datum2):
         if distances.Distance.is_exact_match(datum1, datum2):
             return 1.0
-        if distances.Distance.is_exact_not_match(datum1, datum2):
-            return 0.0
+        #if distances.Distance.is_exact_not_match(datum1, datum2):
+        #    return 0.0
 
         results = []
         for distance, weight in self.weighted_distances.iteritems():
@@ -60,15 +60,16 @@ class Score:
 
         if len(results) >= 2:
             r = sum([result[0]*result[1] for result in results])  / (sum([result[0] for result in results]))
-            return r**(1.0/len(results))
+            return r
         else:
             return 0
 
 def basic_weighted_distances():
     return {
-            distances.Name : 10,
+            distances.Name : 1,
+            distances.Address : 5,
             distances.Website : 1,
-            distances.PostalCode: 5,
+            distances.PostalCode: 1,
             distances.Phone : 15
             }
 
@@ -85,7 +86,7 @@ if __name__ == '__main__':
     matcher = Matcher(filename1, filename2)
 
     score = Score(basic_weighted_distances())
-    threshold = 0.75
+    threshold = 0.9
 
     matches = matcher.find_matches(threshold, score, 'matches_test.csv')
 
