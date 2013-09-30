@@ -4,7 +4,6 @@ class Business:
     def __init__(self, dic):
         self.attr = dic
 
-
     def matches(self, other):
         # TODO
         # return value 0-1
@@ -27,17 +26,6 @@ def spit_csv(matches):
     print 'locu_id,foursquare_id'
     for k in matches.keys():
         print str(k) + ',' + str(matches[k])
-
-def create_biz_col(file_name):
-    f = open(file_name)
-    data = json.load(f)
-    biz_col = []
-    for d in data:
-        biz = Business(d)
-        biz_col.append(biz)
-    f.close()
-    return biz_col
-
 
 if __name__ == '__main__':
     locu = sys.argv[1]

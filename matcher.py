@@ -1,7 +1,22 @@
+import Business
+import sys
+import json
+import distances
+
 class Matcher:
-    def __init__(self, data1, data2):
-        self.data1 = data1
-        self.data2 = data2
+    def __init__(self, filename1, filename2):
+        self.data1 = self.create_collection(filename1)
+        self.data2 = self.create_collection(filename2)
+
+    def create_collection(file_name):
+        f = open(file_name)
+        data = json.load(f)
+        biz_col = []
+        for d in data:
+            biz = Business.Business(d)
+            biz_col.append(biz)
+        f.close()
+        return biz_col
 
     def find_matches(self, threshold, score):
         matches = []
@@ -11,6 +26,11 @@ class Matcher:
                     matches.append((datum1, datum2))
         return matches
 
+    def print_matches(self, threshold, score):
+        matches = self.find_matches(threshold, score)
+        for match in matches:
+            print match[0].attr.id + ", " match[1].attr.id
+
 class Score:
     # weighted_distances is a hash. Key is the distance class and
     # value is the weight.
@@ -19,6 +39,33 @@ class Score:
 
     def similarity(self, datum1, datum2):
         score = 0
+        total_weight = 0
         for distance, weight in self.weighted_distances.iteritems():
-            score += weight*distance.distance(datum1, datum2)
-        return score
+            dist = distance.distance(datum1, datum2)
+            if dist:
+                total_weight += weight
+                score += weight*(1 - distance.distance(datum1, datum2))
+
+        return float(score) / total_weight
+
+def basic_weighted_distances():
+    return {
+            distances.Name : 0.33,
+            distances.Address : 0.33,
+            distances.Website : 0.33
+            }
+
+def print_matches(matches):
+    print 'locu_id,foursquare_id'
+    for k in matches.keys():
+        print str(k) + ',' + str(matches[k])
+
+if __name__ == '__main__':
+    filename1 = sys.args[1]
+    filename2 = sys.args[2]
+    matcher = Matcher(filename1, filename2)
+
+    score = Score(basic_weighted_distances())
+    threshold = 0.75
+    matcher.print_matches(threshold, score)
+
