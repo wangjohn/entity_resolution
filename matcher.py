@@ -23,7 +23,8 @@ class Matcher:
         matches = []
         for datum1 in self.data1:
             for datum2 in self.data2:
-                if score.similarity(datum1, datum2) > threshold:
+                similarity = score.similarity(datum1, datum2)
+                if similarity > threshold:
                     matches.append((datum1, datum2))
         return matches
 
@@ -45,9 +46,12 @@ class Score:
             dist = distance.distance(datum1, datum2)
             if dist:
                 total_weight += weight
-                score += weight*(1 - distance.distance(datum1, datum2))
+                score += weight*(1 - dist)
 
-        return float(score) / total_weight
+        if total_weight > 0:
+            return float(score) / total_weight
+        else:
+            return 0
 
 def basic_weighted_distances():
     return {
@@ -63,8 +67,6 @@ def print_matches_csv(header, matches, filename):
         writer.writerows(matches)
 
 if __name__ == '__main__':
-    print distances.Name.distance(None, None)
-
     filename1 = sys.argv[1]
     filename2 = sys.argv[2]
     matcher = Matcher(filename1, filename2)
