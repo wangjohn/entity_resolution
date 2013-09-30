@@ -44,7 +44,7 @@ class Distance():
 
     @staticmethod
     def is_exact_match(a,b):
-        if a.attr['name']==b.attr['name'] || a.attr['phone']==b.attr['phone']:
+        if a.attr['name']==b.attr['name'] or a.attr['phone']==b.attr['phone']:
             return True
         return False
 
