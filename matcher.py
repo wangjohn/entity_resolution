@@ -2,7 +2,7 @@ import Business
 import sys
 import json
 import distances, cleaners
-import csv
+import csv, random
 
 class Matcher:
     def __init__(self, filename1, filename2):
@@ -90,8 +90,21 @@ if __name__ == '__main__':
     filename2 = sys.argv[2]
     matcher = Matcher(filename1, filename2)
 
-    score = Score(basic_weighted_distances())
-    threshold = 0.885
+    results = []
 
-    matches = matcher.find_matches(threshold, score, 'matches_test.csv')
+    for i in range(2500):
+        d={}
+        d[distances.Name] = int(random.random()*30)
+        d[distances.Website] = int(random.random()*30)
+        d[distances.PostalCode] = int(random.random()*30)
+        d[distances.Phone] = int(random.random()*30)
+
+        score = Score(d)
+        threshold = 0.75
+
+        matches = matcher.find_matches(threshold, score, 'matches_test.csv')
+        #?!? score = f1(matches)
+        # save the list of (dict, score) tuples
+        results += [(d, score)]
+
 
