@@ -80,7 +80,7 @@ class LatLng(Distance):
             dist += (lng_a-lng_b)**2
         if dist > lat_lng_threshold:
             return 0
-        return 1 - (dist / lat_lng_threshold)
+        return 1 - (dist / float(lat_lng_threshold))
 
 class Name(Levenshtein):
     @staticmethod
