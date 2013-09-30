@@ -15,6 +15,9 @@ class Matcher:
         biz_col = []
         for d in data:
             biz = Business.Business(d)
+            for key in biz.attr.keys():
+                if biz.attr[key] == None:
+                    biz.attr[key] = ""
             biz.attr["phone"] = cleaners.clean_phone(biz.attr["phone"])
             biz.attr["street_address"] = cleaners.clean_address(biz.attr["street_address"])
             biz_col.append(biz)
