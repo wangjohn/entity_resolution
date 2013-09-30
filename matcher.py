@@ -32,7 +32,7 @@ class Matcher:
             writer.writerow(header)
             for datum1 in self.data1:
                 for datum2 in self.data2:
-                    similarity = score.similarity(datum1, datum2)
+                    similarity = score.similarity(datum1, datum2, threshold)
                     if similarity > threshold:
                         if similarity < 1:
                             print similarity, datum1.attr['name'], datum1.attr['street_address'], ",", datum2.attr['name'], datum2.attr['street_address']
@@ -46,7 +46,7 @@ class Score:
     def __init__(self, weighted_distances):
         self.weighted_distances = weighted_distances
 
-    def similarity(self, datum1, datum2):
+    def similarity(self, datum1, datum2, threshold):
         if distances.Distance.is_exact_match(datum1, datum2):
             return 1.0
         #if distances.Distance.is_exact_not_match(datum1, datum2):
@@ -58,19 +58,24 @@ class Score:
             if dist:
                 results.append([weight, dist, distance])
 
+        good_results = [result for result in results if result[1] > threshold]
+
         if len(results) >= 2:
             r = sum([result[0]*result[1] for result in results])  / (sum([result[0] for result in results]))
-            return r
+            if len(good_results) > 0:
+                return r**(1.0/len(good_results))
+            else:
+                return r
         else:
             return 0
 
 def basic_weighted_distances():
     return {
             distances.Name : 1,
-            distances.Address : 5,
+            distances.Address : 1,
             distances.Website : 1,
             distances.PostalCode: 1,
-            distances.Phone : 15
+            distances.Phone : 1
             }
 
 def print_matches_csv(header, matches, filename):
@@ -86,7 +91,7 @@ if __name__ == '__main__':
     matcher = Matcher(filename1, filename2)
 
     score = Score(basic_weighted_distances())
-    threshold = 0.9
+    threshold = 0.885
 
     matches = matcher.find_matches(threshold, score, 'matches_test.csv')
 
