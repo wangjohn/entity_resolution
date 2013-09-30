@@ -44,8 +44,9 @@ class Distance():
 
     @staticmethod
     def is_exact_match(a,b):
-        if a.attr['name']==b.attr['name'] or a.attr['phone']==b.attr['phone']:
+        if a.attr['phone']==b.attr['phone'] and a.attr['phone']!="":
             return True
+        if a.attr['name']==b.attr['name'] and a.attr['street_address']==b.attr['street_address'] and a.attr['name']!="" and a.attr['street_address']!=""
         return False
 
 class Levenshtein(Distance):
