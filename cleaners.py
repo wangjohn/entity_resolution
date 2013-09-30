@@ -8,6 +8,7 @@ address_mappings = {
     " west ": " w ",
     " north ": " n ",
     " south ": " s ",
+    " apartment": " apt",
 }
 
 def clean_phone(phone_number):
