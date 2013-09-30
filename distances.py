@@ -56,7 +56,7 @@ class Distance():
     def is_exact_not_match(a,b):
         if a.attr['name']!="" and a.attr['street_address']!="" and a.attr['name']==b.attr['name'] and Address.distance(a,b) < .9:
             return True
-        if a.attr['street_address']!="" and b.attr['street_address']!="":
+        if a.attr['name']!="" and a.attr['name']==b.attr['name'] and a.attr['street_address']!="" and b.attr['street_address']!="":
             any_match = False
             for num1 in re.finditer('(\d+)', a.attr['street_address']):
                 for num2 in re.finditer('(\d+)', b.attr['street_address']):
