@@ -2,7 +2,6 @@
 
 import io, sys, string, os
 
-
 def measure(base_file, test_file):
     base_hash = build_hash(base_file)
     test_hash = build_hash(test_file)
