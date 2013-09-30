@@ -42,13 +42,15 @@ class Score:
         self.weighted_distances = weighted_distances
 
     def similarity(self, datum1, datum2):
-        score = 0
-        total_weight = 0
+        score = 0.0
+        total_weight = 0.0
         for distance, weight in self.weighted_distances.iteritems():
+            if distance.is_exact_match(datum1, datum2):
+                return 1.0
             dist = distance.distance(datum1, datum2)
             if dist:
                 total_weight += weight
-                score += weight*(1 - dist)
+                score += weight*(dist)
 
         if total_weight > 0:
             return float(score) / total_weight
