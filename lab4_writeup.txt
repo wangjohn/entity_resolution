@@ -1,0 +1,58 @@
+Email on Competition: wangjohn@mit.edu
+Name on Competition: John Wang
+
+Teammates: Sharon Hao, Max Kolysh
+
+
+1. Describe your entity resolution technique, as well as its precision,
+recall, and F1 score.
+
+    Our entity resolution technique was simple. For each business attribute, we
+  created a similarity scoring metric between two businesses. The similarity
+  score on that metric would output a score between 0 and 1. We used a weighted
+  average of similarity scoring metrics (across different metrics), and then set
+  a threshold on the weighted average. If two businesses had a weighted score
+  above the threshold, then we would call them a match.
+
+    Moreover, there were hard exact matchers that we put into place. We had an
+  is_exact_match function which told us whether or not there was an exact match
+  based on name and address or phone number. If an exact match occurred, then we
+  would immediately return the match and not even go through the weighted
+  scoring of the other metrics.
+
+    The similarity scoring metrics were mostly based on Levenshtein distance. We
+  computed the distance across all possible attributes, with modifications for
+  latitude and longitude. The distance function for latitude and longitude
+  computed the distance from the two points on the map, took the inverse of the
+  distance, then outputted 1 minus the inverse.
+
+    We will talk about our method for avoiding pariwise comparisons in the third
+  question.
+
+    For our method, we had a precision of 0.987, recall of 0.925, and an F-score
+  of 0.955.
+
+2. What were the most important features that powered your technique?
+
+    The most important feature that powered our technique was the ability to
+  generate weights. In our scheme, we needed to figure out which similarity
+  metrics were the most important for discerning matches. To do this, we created
+  a method to search for weights automatically. This technique involved
+  something akin to a genetic algorithm. In the first iteration, we generated
+  sets of random weights. From there, the weightings would be tested on our
+  dataset and an F-score would be computed. The best weights would move onto the
+  second round, and children would be computed by taking a small number of the
+  weights and adding a permutation to the weight.
+
+    The is_exact_match function also helped improve matches considerably. Since
+  these matches were almost always real matches, we could be very confident
+  about them.
+
+3. How did you avoid pairwise comparison of all venues across both datasets?
+
+    We avoided pairwise comparison by clustering venues based on location and
+  postal code. We used k-means clustering on the latitude/longitude coordinates
+  and exact matches for postal codes. Venues that did not have either of these
+  characteristics were incorporated into their own group (which would be checked
+  by every group). This significantly reduced the number of pairwise comparisons 
+  that we had to make.
